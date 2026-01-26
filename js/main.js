@@ -23,17 +23,32 @@ const init = () => {
 };
 
 const setupWheel = () => {
+    const labelsContainer = document.getElementById("wheelLabels");
+    const numPrizes = prizes.length;
+    const anglePerPrize = 360 / numPrizes;
+
+    // 1. Crear el fondo de colores dinámico
+    const gradient = prizes.map((p, i) => 
+        `${p.color} ${i * anglePerPrize}deg ${(i + 1) * anglePerPrize}deg`
+    ).join(', ');
+    wheel.style.background = `conic-gradient(${gradient})`;
+
+    // 2. Crear los textos y números
     prizes.forEach((prize, i) => {
-        const icon = document.createElement("div");
-        icon.className = "wheel-icon";
-        icon.style.transform = `rotate(${i * sliceDeg}deg) translateY(-160px)`;
-        icon.innerHTML = prize.icon;
-        iconsContainer.appendChild(icon);
+        const label = document.createElement("div");
+        label.className = "wheel-label";
+        
+        // Rotamos cada etiqueta para que quede centrada en su gajo
+        const rotation = (i * anglePerPrize) + (anglePerPrize / 2);
+        label.style.transform = `rotate(${rotation}deg)`;
+
+        label.innerHTML = `
+            <span>${prize.icon}</span>
+            <strong>${prize.val}</strong>
+            <small>${prize.text}</small>
+        `;
+        labelsContainer.appendChild(label);
     });
-    // Aplicamos el gradiente dinámico
-    wheel.style.background = `conic-gradient(${prizes.map((_, i) => 
-        `${i % 2 === 0 ? '#1e4fa1' : '#173b7a'} ${i * sliceDeg}deg ${(i + 1) * sliceDeg}deg`
-    ).join(', ')})`;
 };
 
 const spin = () => {
