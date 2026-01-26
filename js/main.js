@@ -1,4 +1,3 @@
-// Configuración y Estado
 const prizes = [
     { type: "lose", title: "¡SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "❌", val: "0" },
     { type: "merch", title: "¡FELICITACIONES!", text: "MERCH OFICIAL", icon: "👕", val: "M" },
@@ -8,8 +7,6 @@ const prizes = [
 ];
 
 let rotation = 0;
-const sliceDeg = 360 / prizes.length;
-
 const wheel = document.getElementById("wheel");
 const slot = document.getElementById("slot");
 
@@ -17,21 +14,26 @@ const setupWheel = () => {
     const labelsContainer = document.getElementById("wheelLabels");
     if (!labelsContainer) return;
 
-    const anglePerPrize = 360 / prizes.length;
+    const numPrizes = prizes.length;
+    const sliceDeg = 360 / numPrizes; // 72 grados para 5 premios
     
-    // Fondo dinámico con tus colores
+    // Generar el gradiente dinámico asegurando los 5 gajos
     const colors = ["#1e4fa1", "#173b7a"];
-    const gradient = prizes.map((_, i) => 
-        `${colors[i % 2]} ${i * anglePerPrize}deg ${(i + 1) * anglePerPrize}deg`
-    ).join(', ');
+    const gradientParts = prizes.map((_, i) => {
+        const start = i * sliceDeg;
+        const end = (i + 1) * sliceDeg;
+        return `${colors[i % 2]} ${start}deg ${end}deg`;
+    });
     
-    wheel.style.background = `conic-gradient(${gradient})`;
-    labelsContainer.innerHTML = "";
+    wheel.style.background = `conic-gradient(${gradientParts.join(', ')})`;
 
+    labelsContainer.innerHTML = "";
     prizes.forEach((prize, i) => {
         const label = document.createElement("div");
         label.className = "wheel-label";
-        const rotationAngle = (i * anglePerPrize) + (anglePerPrize / 2);
+        
+        // El texto/icono también se rota a la mitad del gajo para centrarse
+        const rotationAngle = (i * sliceDeg) + (sliceDeg / 2);
         label.style.transform = `rotate(${rotationAngle}deg)`;
 
         label.innerHTML = `
@@ -44,14 +46,22 @@ const setupWheel = () => {
 
 const spin = () => {
     slot.style.display = "none";
-    slot.classList.remove("win");
     document.getElementById("spinSound").play();
 
-    const prizeIndex = Math.floor(Math.random() * prizes.length);
-    const extraSpins = 5;
-    const targetRotation = (360 - (prizeIndex * sliceDeg));
+    const numPrizes = prizes.length;
+    const sliceDeg = 360 / numPrizes;
+    const prizeIndex = Math.floor(Math.random() * numPrizes);
     
-    // Sumamos la rotación acumulada para que siempre gire hacia adelante
+    const extraSpins = 5; // Vueltas completas
+    
+    /* LÓGICA DE CENTRADO:
+       1. (360 - (prizeIndex * sliceDeg)) nos lleva al inicio del gajo.
+       2. Le restamos (sliceDeg / 2) para que la flecha quede en el medio.
+    */
+    const centerOffset = sliceDeg / 2;
+    const targetRotation = (360 - (prizeIndex * sliceDeg)) - centerOffset;
+    
+    // Acumulamos la rotación para que el giro sea infinito
     rotation += (extraSpins * 360) + targetRotation - (rotation % 360);
     
     wheel.style.transform = `rotate(${rotation}deg)`;
@@ -73,6 +83,7 @@ const showResult = (index) => {
     }
 };
 
+window.onload = setupWheel;
 
 const spawnParticles = () => {
     for (let i = 0; i < 30; i++) {
@@ -90,8 +101,6 @@ const resetGame = () => {
     iconsContainer.style.transform = "rotate(0deg)";
     slot.style.display = "none";
 };
-
-window.onload = setupWheel;
 
 const init = () => {
     setupWheel();
