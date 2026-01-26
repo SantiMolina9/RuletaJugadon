@@ -4,7 +4,13 @@ const prizes = [
     { type: "fs", title: "SENSATIONAL!", value: 30, text: "30 FREE SPINS", icon: "🎰", val: "30" },
     { type: "fs", title: "SENSATIONAL!", value: 50, text: "50 FREE SPINS", icon: "💎", val: "50" },
     { type: "fs", title: "SENSATIONAL!", value: 100, text: "100 FREE SPINS", icon: "🔥", val: "100" },
-    { type: "fs", title: "MEGA WIN!", value: 200, text: "200 FREE SPINS", icon: "⭐", val: "200" } // 6to premio
+    { type: "fs", title: "MEGA WIN!", value: 200, text: "200 FREE SPINS", icon: "⭐", val: "200" },
+    { type: "merch", title: "¡FELICITACIONES!", text: "MERCH OFICIAL", icon: "👕", val: "M" },
+    { type: "lose", title: "¡SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "❌", val: "0" },
+    { type: "fs", title: "SENSATIONAL!", value: 100, text: "100 FREE SPINS", icon: "🔥", val: "100" },
+    { type: "fs", title: "SENSATIONAL!", value: 50, text: "50 FREE SPINS", icon: "💎", val: "50" },
+    { type: "fs", title: "SENSATIONAL!", value: 30, text: "30 FREE SPINS", icon: "🎰", val: "30" },
+    { type: "fs", title: "MEGA WIN!", value: 200, text: "200 FREE SPINS", icon: "⭐", val: "200" },
 ];
 
 let rotation = 0;
