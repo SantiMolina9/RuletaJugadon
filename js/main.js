@@ -12,6 +12,7 @@ const prizes = [
 ];
 
 let rotation = 0;
+let isSpinning = false;
 const wheel = document.getElementById("wheel");
 const slot = document.getElementById("slot");
 
@@ -20,7 +21,7 @@ const setupWheel = () => {
     if (!labelsContainer) return;
 
     const numPrizes = prizes.length;
-    const sliceDeg = 360 / numPrizes; // Ahora son 60 grados exactos
+    const sliceDeg = 360 / numPrizes;
     
     const colors = ["#1e4fa1", "#173b7a"];
     const gradientParts = prizes.map((_, i) => {
@@ -37,19 +38,21 @@ const setupWheel = () => {
         label.className = "wheel-label";
         const rotationAngle = (i * sliceDeg) + (sliceDeg / 2);
         label.style.transform = `rotate(${rotationAngle}deg)`;
-
-        label.innerHTML = `
-            <i>${prize.icon}</i>
-            <strong>${prize.val}</strong>
-        `;
+        label.innerHTML = `<i>${prize.icon}</i><strong>${prize.val}</strong>`;
         labelsContainer.appendChild(label);
     });
 };
 
 const spin = () => {
+    if (isSpinning) return;
+    isSpinning = true;
+
     slot.style.display = "none";
     slot.classList.remove("win");
-    document.getElementById("spinSound").play();
+
+    // Manejo robusto de audio
+    const spinSound = document.getElementById("spinSound");
+    if (spinSound) spinSound.play().catch(e => console.warn("Audio blocked/not found"));
 
     const numPrizes = prizes.length;
     const sliceDeg = 360 / numPrizes;
@@ -57,41 +60,51 @@ const spin = () => {
     const extraSpins = 5; 
     
     const centerOffset = sliceDeg / 2;
-    // Cálculo para que el premio quede bajo la flecha superior (0 grados)
     const targetRotation = (360 - (prizeIndex * sliceDeg)) - centerOffset;
     
+    // Aplicamos la fórmula: $rotation_{new} = rotation_{total} + (offset_{target})$
     rotation += (extraSpins * 360) + targetRotation - (rotation % 360);
     
     wheel.style.transform = `rotate(${rotation}deg)`;
-    setTimeout(() => showResult(prizeIndex), 4000);
+
+    setTimeout(() => {
+        showResult(prizeIndex);
+        isSpinning = false; // Se libera el bloqueo al finalizar la animación
+    }, 4000);
 };
 
 const showResult = (index) => {
     const prize = prizes[index];
     document.getElementById("slotTitle").textContent = prize.title;
     document.getElementById("slotValue").textContent = prize.text;
+    
     slot.style.display = "flex";
     slot.classList.add("win");
 
     if (prize.type !== "lose") {
-        document.getElementById("winSound").play();
-        spawnParticles();
+        const winSound = document.getElementById("winSound");
+        if (winSound) winSound.play().catch(e => console.warn("Win sound blocked"));
+        spawnParticles(); // ¡Ahora sí existe!
     }
 };
 
-const resetGame = () => {
-    rotation = 0;
-    wheel.style.transform = "rotate(0deg)";
-    slot.style.display = "none";
+// Función de partículas (restaurada)
+const spawnParticles = () => {
+    for (let i = 0; i < 30; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.style.left = Math.random() * window.innerWidth + "px";
+        p.style.backgroundColor = ["#f2c46d", "#ffffff", "#1e4fa1"][Math.floor(Math.random() * 3)];
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 2000);
+    }
 };
 
 const init = () => {
     setupWheel();
-    document.getElementById("btnSpin").addEventListener("click", spin);
-    document.getElementById("btnReset").addEventListener("click", resetGame);
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") spin();
+    });
 };
 
-window.onload = init;
-
-// Arrancamos la App
-init(); 
+init();
