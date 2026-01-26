@@ -1,57 +1,76 @@
+/* 1. Global Reset & Variables */
 :root {
     --primary-blue: #1e4fa1;
     --dark-blue: #173b7a;
     --gold: #f2c46d;
+    --gold-shadow: rgba(242, 196, 109, 0.6);
     --red-arrow: #ff0000;
+    --white: #ffffff;
+    --font-main: 'Arial Black', Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
-    margin: 0;
     width: 100%;
     height: 100%;
     background: #000 url("../assets/fondo-casino.png") center/cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Arial Black', Arial;
+    font-family: var(--font-main);
     overflow: hidden;
 }
 
-.wrapper{
-  position:relative;
-  width:700px;
-  height:760px;
-  text-align:center;
+/* 2. Layout Wrapper */
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
 }
 
-.title-top{
-  color:#fff;
-  font-size:26px;
-  letter-spacing:2px;
+.title-top {
+    color: var(--white);
+    font-size: 28px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 
-/* Flecha */
-.arrow{
-  position:absolute;
-  top:70px;
-  left:50%;
-  transform:translateX(-50%);
-  width:0;height:0;
-  border-left:18px solid transparent;
-  border-right:18px solid transparent;
-  border-bottom:30px solid red;
-  z-index:20;
-}
-
-/* ===== RULETA ===== */
-/* Contenedor con efecto de luces */
+/* 3. La Ruleta (Contenedores) */
 .wheel-wrapper {
     position: relative;
     width: 550px;
     height: 550px;
-    border: 15px solid #333; /* Borde exterior sólido */
+    padding: 15px; /* Espacio para el borde exterior */
+    background: #222; /* Borde "metálico" oscuro */
     border-radius: 50%;
-    box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 20px #f2c46d;
+    box-shadow: 
+        0 0 50px rgba(0,0,0,0.9), 
+        0 0 20px var(--gold-shadow);
+    border: 4px solid var(--gold);
+}
+
+/* Flecha: Ahora posicionada absoluta respecto al wrapper de la ruleta */
+.arrow {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 40px solid var(--red-arrow);
+    z-index: 50;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
 }
 
 .wheel {
@@ -60,170 +79,156 @@ html, body {
     border-radius: 50%;
     position: relative;
     overflow: hidden;
-    transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
-    border: 5px solid #f2c46d; /* El aro dorado */
+    transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
 }
 
-/* Capa que contiene los números e iconos */
+/* 4. Gajos y Etiquetas */
 .wheel-labels {
     position: absolute;
     width: 100%;
     height: 100%;
+    pointer-events: none;
 }
 
 .wheel-label {
     position: absolute;
     top: 0;
     left: 50%;
-    width: 60px;
-    height: 50%; /* Llega hasta el centro */
-    margin-left: -30px;
+    width: 100px;
+    height: 50%;
+    margin-left: -50px;
     transform-origin: bottom center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    color: white;
-    font-size: 14px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    padding-top: 25px;
+    color: var(--white);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
-.wheel-label i, .wheel-label span {
-    display: block;
-    margin-bottom: 5px;
+.wheel-label i {
+    font-size: 35px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
 }
 
 .wheel-label strong {
-    font-size: 20px;
-    color: #f2c46d;
+    font-size: 22px;
+    color: var(--gold);
 }
 
-/* Centro con logo */
-.wheel-center{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  background:radial-gradient(circle at top,#ffffff,#cfe2ff);
-  border:4px solid #f2c46d;
-  box-shadow:
-    0 0 25px rgba(242,196,109,.9),
-    inset 0 0 15px rgba(0,0,0,.25);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:30;
-  pointer-events:none;
-}
-
-.wheel-center img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-/* ===== CARTEL PREMIO ===== */
-.slot-box{
-  position:absolute;
-  top:360px;
-  left:50%;
-  transform:translateX(-50%);
-  width:360px;
-  height:160px;
-  background:#0f2a55;
-  border:3px solid #f2c46d;
-  border-radius:18px;
-  box-shadow:0 0 30px rgba(242,196,109,.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:40;
-}
-
-.slot-inner{
-  text-align:center;
-  color:white;
-}
-
-.slot-inner span{
-  font-size:18px;
-  letter-spacing:2px;
-  color:#b9dcff;
-}
-
-.slot-inner strong{
-  display:block;
-  margin-top:6px;
-  font-size:32px;
-  color:#f2c46d;
-}
-
-/* Animaciones */
-@keyframes popIn{
-  0%{transform:translateX(-50%) scale(.4);opacity:0}
-  70%{transform:translateX(-50%) scale(1.1)}
-  100%{transform:translateX(-50%) scale(1);opacity:1}
-}
-
-.slot-box.win{
-  animation:popIn .6s ease-out;
-}
-
-/* Confeti */
-.particle{
-  position:absolute;
-  width:10px;
-  height:10px;
-  background:gold;
-  border-radius:50%;
-  pointer-events:none;
-  animation:fall 1.8s linear forwards;
-}
-
-@keyframes fall{
-  0%{transform:translateY(-40px);opacity:1}
-  100%{transform:translateY(600px);opacity:0}
-}
-
-/* Botones */
-.buttons{
-  margin-top:25px;
-}
-
-button{
-  padding:12px 26px;
-  margin:0 8px;
-  border:none;
-  border-radius:10px;
-  font-weight:bold;
-  font-size:16px;
-  cursor:pointer;
-  background:#00b3ff;
-}
-
-.wheel-icons{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-}
-
-.wheel-icon {
+/* 5. Centro */
+.wheel-center {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 46px;
-    height: 46px;
-    transform-origin: 50% calc(100% + 160px);
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at top, #fff, #cfe2ff);
+    border: 5px solid var(--gold);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-    filter: drop-shadow(0 0 6px rgba(0,0,0,0.6));
-    transition: transform 4s cubic-bezier(.17,.67,.17,1);
-}   
+    z-index: 60;
+    box-shadow: 0 0 30px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+.wheel-center img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+/* 6. Cartel de Premios (Slot Box) */
+.slot-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrado sobre la ruleta */
+    width: 380px;
+    min-height: 180px;
+    background: rgba(15, 42, 85, 0.95);
+    border: 4px solid var(--gold);
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 20px var(--gold-shadow);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 20px;
+}
+
+.slot-inner span {
+    font-size: 18px;
+    color: #b9dcff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.slot-inner strong {
+    display: block;
+    font-size: 36px;
+    color: var(--gold);
+    margin-top: 10px;
+}
+
+/* 7. Botones */
+.buttons {
+    margin-top: 40px;
+}
+
+button {
+    padding: 15px 35px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-main);
+    font-size: 18px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--gold);
+    color: var(--dark-blue);
+    box-shadow: 0 4px 0 #b08d4a;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #b08d4a;
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 0 0 #b08d4a;
+}
+
+/* Confeti */
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: gold;
+    border-radius: 2px;
+    pointer-events: none;
+    animation: fall 2s linear forwards;
+    z-index: 110;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes popIn {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.slot-box.win {
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}

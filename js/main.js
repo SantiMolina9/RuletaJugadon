@@ -1,51 +1,42 @@
 // Configuración y Estado
 const prizes = [
-    { type: "lose", title: "¡SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "❌" },
-    { type: "merch", title: "¡FELICITACIONES!", text: "MERCH OFICIAL", icon: "👕" },
-    { type: "fs", title: "SENSATIONAL!", value: 30, text: "30 FREE SPINS", icon: "🎰" },
-    { type: "fs", title: "SENSATIONAL!", value: 50, text: "50 FREE SPINS", icon: "💎" },
-    { type: "fs", title: "SENSATIONAL!", value: 100, text: "100 FREE SPINS", icon: "🔥" }
+    { type: "lose", title: "¡SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "❌", val: "0" },
+    { type: "merch", title: "¡FELICITACIONES!", text: "MERCH OFICIAL", icon: "👕", val: "M" },
+    { type: "fs", title: "SENSATIONAL!", value: 30, text: "30 FREE SPINS", icon: "🎰", val: "30" },
+    { type: "fs", title: "SENSATIONAL!", value: 50, text: "50 FREE SPINS", icon: "💎", val: "50" },
+    { type: "fs", title: "SENSATIONAL!", value: 100, text: "100 FREE SPINS", icon: "🔥", val: "100" }
 ];
 
 let rotation = 0;
 const sliceDeg = 360 / prizes.length;
 
-// Selectores
 const wheel = document.getElementById("wheel");
-const iconsContainer = document.getElementById("wheelIcons");
 const slot = document.getElementById("slot");
-
-// Inicialización
-const init = () => {
-    setupWheel();
-    document.getElementById("btnSpin").addEventListener("click", spin);
-    document.getElementById("btnReset").addEventListener("click", resetGame);
-};
 
 const setupWheel = () => {
     const labelsContainer = document.getElementById("wheelLabels");
-    const numPrizes = prizes.length;
-    const anglePerPrize = 360 / numPrizes;
+    if (!labelsContainer) return;
 
-    // 1. Crear el fondo de colores dinámico
-    const gradient = prizes.map((p, i) => 
-        `${p.color} ${i * anglePerPrize}deg ${(i + 1) * anglePerPrize}deg`
+    const anglePerPrize = 360 / prizes.length;
+    
+    // Fondo dinámico con tus colores
+    const colors = ["#1e4fa1", "#173b7a"];
+    const gradient = prizes.map((_, i) => 
+        `${colors[i % 2]} ${i * anglePerPrize}deg ${(i + 1) * anglePerPrize}deg`
     ).join(', ');
+    
     wheel.style.background = `conic-gradient(${gradient})`;
+    labelsContainer.innerHTML = "";
 
-    // 2. Crear los textos y números
     prizes.forEach((prize, i) => {
         const label = document.createElement("div");
         label.className = "wheel-label";
-        
-        // Rotamos cada etiqueta para que quede centrada en su gajo
-        const rotation = (i * anglePerPrize) + (anglePerPrize / 2);
-        label.style.transform = `rotate(${rotation}deg)`;
+        const rotationAngle = (i * anglePerPrize) + (anglePerPrize / 2);
+        label.style.transform = `rotate(${rotationAngle}deg)`;
 
         label.innerHTML = `
-            <span>${prize.icon}</span>
+            <i>${prize.icon}</i>
             <strong>${prize.val}</strong>
-            <small>${prize.text}</small>
         `;
         labelsContainer.appendChild(label);
     });
@@ -53,16 +44,17 @@ const setupWheel = () => {
 
 const spin = () => {
     slot.style.display = "none";
+    slot.classList.remove("win");
     document.getElementById("spinSound").play();
 
     const prizeIndex = Math.floor(Math.random() * prizes.length);
     const extraSpins = 5;
     const targetRotation = (360 - (prizeIndex * sliceDeg));
     
+    // Sumamos la rotación acumulada para que siempre gire hacia adelante
     rotation += (extraSpins * 360) + targetRotation - (rotation % 360);
     
     wheel.style.transform = `rotate(${rotation}deg)`;
-    iconsContainer.style.transform = `rotate(${rotation}deg)`;
 
     setTimeout(() => showResult(prizeIndex), 4000);
 };
@@ -81,6 +73,7 @@ const showResult = (index) => {
     }
 };
 
+
 const spawnParticles = () => {
     for (let i = 0; i < 30; i++) {
         const p = document.createElement("div");
@@ -98,5 +91,13 @@ const resetGame = () => {
     slot.style.display = "none";
 };
 
+window.onload = setupWheel;
+
+const init = () => {
+    setupWheel();
+    document.getElementById("btnSpin").addEventListener("click", spin);
+    document.getElementById("btnReset").addEventListener("click", resetGame);
+};
+
 // Arrancamos la App
-init();
+init(); 
