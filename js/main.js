@@ -102,8 +102,14 @@ const spawnParticles = () => {
 
 const init = () => {
     setupWheel();
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") spin();
+    
+    window.addEventListener("keydown", (event) => {
+        // Detectamos si es Enter o si es un número entre 1 y 8
+        const isNumberKey = event.key >= "1" && event.key <= "8";
+        
+        if (event.key === "Enter" || isNumberKey) {
+            spin();
+        }
     });
 };
 
