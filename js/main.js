@@ -1,14 +1,14 @@
 const prizes = [
-    { type: "lose", title: "¡SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "❌", val: "0" },
-    { type: "merch", title: "¡FELICITACIONES!", text: "MERCH OFICIAL", icon: "👕", val: "M" },
-    { type: "fs", title: "SENSATIONAL!", value: 30, text: "30 FREE SPINS", icon: "🎰", val: "30" },
-    { type: "fs", title: "SENSATIONAL!", value: 50, text: "50 FREE SPINS", icon: "💎", val: "50" },
-    { type: "fs", title: "SENSATIONAL!", value: 100, text: "100 FREE SPINS", icon: "🔥", val: "100" },
-    { type: "merch", title: "¡FELICITACIONES!", text: "MERCH OFICIAL", icon: "👕", val: "M" },
-    { type: "lose", title: "¡SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "❌", val: "0" },
-    { type: "fs", title: "SENSATIONAL!", value: 100, text: "100 FREE SPINS", icon: "🔥", val: "100" },
-    { type: "fs", title: "SENSATIONAL!", value: 50, text: "50 FREE SPINS", icon: "💎", val: "50" },
-    { type: "fs", title: "SENSATIONAL!", value: 30, text: "30 FREE SPINS", icon: "🎰", val: "30" },
+    { type: "lose", title: "¡MALA SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "☹️", val: "0" },
+    { type: "merch", title: "¡FELICITACIONES!", text: "Ganaste PREMIO JUGADON", icon: "🎁", val: "PREMIO" },
+    { type: "fs", title: "FELICITACIONES!", value: 30, text: "Ganaste 30 FREE SPINS", icon: "🎉", val: "30" },
+    { type: "fs", title: "FELICITACIONES!", value: 50, text: "Ganaste 50 FREE SPINS", icon: "🎉", val: "50" },
+    { type: "fs", title: "FELICITACIONES!", value: 100, text: "Ganaste 100 FREE SPINS", icon: "🎉", val: "100" },
+    { type: "merch", title: "¡FELICITACIONES!", text: "Ganaste PREMIO JUGADON!", icon: "🎁", val: "PREMIO" },
+    { type: "lose", title: "¡MALA SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "☹️", val: "0" },
+    { type: "fs", title: "FELICITACIONES!", value: 100, text: "Ganaste 100 FREE SPINS", icon: "🎉", val: "100" },
+    { type: "fs", title: "FELICITACIONES!", value: 50, text: "Ganaste 50 FREE SPINS", icon: "🎉", val: "50" },
+    { type: "fs", title: "FELICITACIONES!", value: 30, text: "Ganaste 30 FREE SPINS", icon: "🎉", val: "30" },
 ];
 
 let rotation = 0;
@@ -42,6 +42,44 @@ const setupWheel = () => {
         labelsContainer.appendChild(label);
     });
 };
+
+// Aseguramos que el foco esté en la ventana principal al cargar
+window.focus();
+
+window.addEventListener('keydown', function(event) {
+    // Obtenemos el código de la tecla
+    const key = event.key; // '1', '2', ..., 'Enter'
+    const keyCode = event.keyCode; // 49-56 para números, 13 para Enter
+
+    // Registramos en consola para debuggear en la TV si es necesario
+    console.log("Tecla detectada: " + key + " (Code: " + keyCode + ")");
+
+    // Lógica para teclas 1 a 8 o la tecla Enter
+    if ((keyCode >= 49 && keyCode <= 56) || keyCode === 13) {
+        
+        // Evitamos que la tecla realice su función por defecto (como scroll)
+        event.preventDefault();
+
+        // Llamamos a la función de giro (asegúrate de que se llame así en tu main.js)
+        if (typeof spin === "function") {
+            spin();
+        } else {
+            console.error("La función spin() no está definida.");
+        }
+    }
+});
+
+// Forzar el foco si el usuario hace clic en cualquier parte del fondo
+document.addEventListener('click', () => {
+    window.focus();
+});
+
+// Opcional: Re-enfocar la ventana cada vez que se gane visibilidad
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        window.focus();
+    }
+});
 
 const spin = () => {
     if (isSpinning) return;
