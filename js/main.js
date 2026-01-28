@@ -119,10 +119,18 @@ const showResult = (index) => {
     slot.style.display = "flex";
     slot.classList.add("win");
 
-    if (prize.type !== "lose") {
+   if (prize.type !== "lose") {
+        // Lógica de Ganador
         const winSound = document.getElementById("winSound");
         if (winSound) winSound.play().catch(e => console.warn("Win sound blocked"));
-        spawnParticles(); // ¡Ahora sí existe!
+        spawnParticles(); 
+    } else {
+        // Lógica de Perdedor (NUEVA)
+        const loseSound = document.getElementById("loseSound");
+        if (loseSound) {
+            loseSound.currentTime = 0; // Reinicia el audio por si se pulsa rápido
+            loseSound.play().catch(e => console.warn("Lose sound blocked"));
+        }
     }
 };
 
