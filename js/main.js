@@ -1,14 +1,14 @@
 const prizes = [
     { type: "lose", title: "¡MALA SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "☹️", val: "0" },
-    { type: "merch", title: "¡FELICITACIONES!", text: "Ganaste PREMIO JUGADON", icon: "🎁", val: "PREMIO" },
-    { type: "fs", title: "FELICITACIONES!", value: 30, text: "Ganaste 30 FREE SPINS", icon: "🎉", val: "30" },
-    { type: "fs", title: "FELICITACIONES!", value: 50, text: "Ganaste 50 FREE SPINS", icon: "🎉", val: "50" },
-    { type: "fs", title: "FELICITACIONES!", value: 100, text: "Ganaste 100 FREE SPINS", icon: "🎉", val: "100" },
-    { type: "merch", title: "¡FELICITACIONES!", text: "Ganaste PREMIO JUGADON!", icon: "🎁", val: "PREMIO" },
+    { type: "merch", title: "¡FELICITACIONES!", text: "GANASTE PREMIO JUGADON", icon: "🎁", val: "PREMIO" },
+    { type: "fs", title: "FELICITACIONES!", value: 30, text: "GANASTE 30 FREE SPINS", icon: "🎉", val: "30" },
+    { type: "fs", title: "FELICITACIONES!", value: 50, text: "GANASTE 50 FREE SPINS", icon: "🎉", val: "50" },
+    { type: "fs", title: "FELICITACIONES!", value: 100, text: "GANASTE 100 FREE SPINS", icon: "🎉", val: "100" },
+    { type: "merch", title: "¡FELICITACIONES!", text: "GANASTE PREMIO JUGADON!", icon: "🎁", val: "PREMIO" },
     { type: "lose", title: "¡MALA SUERTE!", text: "GRACIAS POR PARTICIPAR", icon: "☹️", val: "0" },
-    { type: "fs", title: "FELICITACIONES!", value: 100, text: "Ganaste 100 FREE SPINS", icon: "🎉", val: "100" },
-    { type: "fs", title: "FELICITACIONES!", value: 50, text: "Ganaste 50 FREE SPINS", icon: "🎉", val: "50" },
-    { type: "fs", title: "FELICITACIONES!", value: 30, text: "Ganaste 30 FREE SPINS", icon: "🎉", val: "30" },
+    { type: "fs", title: "FELICITACIONES!", value: 100, text: "GANASTE 100 FREE SPINS", icon: "🎉", val: "100" },
+    { type: "fs", title: "FELICITACIONES!", value: 50, text: "GANASTE 50 FREE SPINS", icon: "🎉", val: "50" },
+    { type: "fs", title: "FELICITACIONES!", value: 30, text: "GANASTE 30 FREE SPINS", icon: "🎉", val: "30" },
 ];
 
 let rotation = 0;
